@@ -13,6 +13,7 @@ Settings parameters allowed:
 * action (string, URL of request - default: for 'a' elements, the 'href' attribute before the querystring; for 'form' elements, the action attribute)
 * method (string, 'get' or 'post' - default: for 'a' elements, 'get'; for 'form' elements, the 'method' attribute or 'post' if it is not set)
 * params (string, default: for 'a' elements, the querystring of the 'href' attribute'; for 'form' elements, the serialized form data)
+* eventName (string, the event to trigger the request - default: for 'a' elements, 'click'; for 'form' elements, 'submit')
 
 You can also set the following data attributes in your HTML element:
 * data-successElements

@@ -1,14 +1,6 @@
 /**
 * jQuery AJAX Submitter by Avais Sethi
-* Allowed settings: 
-*	- success (callback, called after successful response)
-*	- fail (callback, called after failes response)
-*	- successElements (string or array, elements to be updated after success with their respective elements in response)
-*	- failElements (string or array, elements to be updated after fail with failMessage)
-*	- failMessage (string, message to be displayed in failElements after failed request)
-*	- action (string, URL of request - default: for 'a' elements, the 'href' attribute before the querystring; for 'form' elements, the action attribute)
-*	- method (string, 'get' or 'post' - default: for 'a' elements, 'get'; for 'form' elements, the 'method' attribute or 'post' if it is not set)
-*	- params (string, default: for 'a' elements, the querystring of the 'href' attribute'; for 'form' elements, the serialized form data)
+* See README.md for details
 */
 
 (function($) {
@@ -139,16 +131,23 @@
 
 		var eventName;
 
-		switch ( this.prop('tagName').toLowerCase() ) {  //event will depend on element type
-			case 'form':
-				eventName = 'submit';
-			break;
-			default:
-				eventName = 'click';
-			break;
+		if ( settings.eventName ) {
+			eventName = settings.eventName;
+		} else {
+
+			switch ( this.prop('tagName').toLowerCase() ) {  //event will depend on element type
+				case 'form':
+					eventName = 'submit';
+				break;
+				default:
+					eventName = 'click';
+				break;
+			}
+
 		}
 
-		this.bind(eventName, submitRequest);
+
+		this.bind(eventName submitRequest);
 
 		return this;  //make sure to maintain chainability!
 
