@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="path/to/jquery-ajaxsubmitter.js"></script>
+	</head>
+
+	<body>
+
+		<div id="form_message"></div>
+
+		<form id="my_form" method="post" action="example.php">
+			<input type="text" name="email" />
+			<input type="password" name="password" />
+			<input type="password" name="password_confirm" />
+			<input type="submit" name="submit" value="Go!" />
+		</form>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+				//most basic example
+				$('#my_form').ajaxSubmitter();
+
+				//force 'get' method
+				$('#my_form').ajaxSubmitter({
+					method: 'get';
+				});
+
+				//add callbacks
+				$('#my_form').ajaxSubmitter({
+					success: function() { alert('The form has been successfully submitted!'); },
+					fail: function() { alert('There was an error with your request.'); }
+				});
+
+				//add element(s) to be updated on success or failure of request
+				/* the server script must return a view with these elements populated and the ajaxSubmitter will
+				parse the response and, for all elements listed below, will update the page with their 
+				respective elements in the response */
+				$('#my_form').ajaxSubmitter({
+					successElements: '#form_message',  //this can also be an array of elements
+					failElements: '#form_message',  //failMessage is required if providing failElements
+					failMessage: '<p class="error">There was an error with your request.</p>'
+				});
+
+			});
+		</script>
+
+	</body>
+</html>
