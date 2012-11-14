@@ -109,25 +109,35 @@
 				alert(e.message);
 			}
 
-			$.ajax({  //jQuery's ajax method
-		
-				url: config.action,
-				data: config.params,
-				type: config.method
-		
-			}).done(function(response) {
+			if ( !config.before || (config.before && config.before()) ) { 
 
-				updateElements(config.successElements, response);  //update elements on success
-				if ( config.success ) config.success(response);  //execute user callback if it exists
-				
-			}).fail(function() {
+				$.ajax({  //jQuery's ajax method
+			
+					url: config.action,
+					data: config.params,
+					type: config.method
+			
+				}).done(function(response) {  //success
 
-				updateElements(config.failElements, config.failMessage, true);  //update elements on fail
-				if ( config.fail ) config.fail();  //execute user callback if exists
+					updateElements(config.successElements, response);  //update elements on success
+					if ( config.success ) config.success(response);  //execute callback if exists
+					
+				}).fail(function() {  //fail
 
-			});		
+					updateElements(config.failElements, config.failMessage, true);  //update elements on fail
+					if ( config.fail ) config.fail();  //execute callback if exists
 
-		};
+				}).always(function() {  //always
+
+					if ( config.after ) config.after();  //execute callback if exists
+
+				})	
+
+			}
+
+		}
+
+		/* Here is where the function actually gets binded to the event */
 
 		var eventName;
 
@@ -145,7 +155,6 @@
 			}
 
 		}
-
 
 		this.bind(eventName submitRequest);
 
