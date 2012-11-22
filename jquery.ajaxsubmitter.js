@@ -17,6 +17,7 @@
 				//some variables
 				var eles;
 				var i;
+				var data;
 
 				if ( elements && !$.isArray(elements) ) {  //make sure there are elements	
 					
@@ -28,10 +29,10 @@
 					}
 				}
 
-				if ( $this.attr('data-'+arrayName) ) {  //get the 'data-*' attribute
-					
-					//add to elements array with string of space separated values
-					eles = $this.attr('data-'+arrayName).split(' ');
+				if ( $this.data(arrayName) ) {  //get the 'data-*' attribute
+					eles = $this.data(arrayName);
+					//add to elements array
+					eles = !$.isArray(eles) ? eles.split(' ') : eles;  //split space seperated values if needed
 					for ( i = 0; i < eles.length; i++ ) {
 						elements.push(eles[i]);
 					}
