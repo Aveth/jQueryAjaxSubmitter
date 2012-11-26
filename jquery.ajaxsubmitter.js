@@ -11,7 +11,7 @@
 		$this = this;  //get a reference to the current object
 		
 		//function is used to create an array of update elements
-		var setElements = function(elements, arrayName) {
+		var setElements = function(elements, moreElements) {
 			try {
 
 				//some variables
@@ -19,7 +19,9 @@
 				var i;
 				var data;
 
-				if ( elements && !$.isArray(elements) ) {  //make sure there are elements	
+				if ( !elements ) elements = [];
+
+				if ( !$.isArray(elements) ) {  //make sure there are elements	
 					
 					//forms an array out of a string of space separated values
 					eles = elements.split(' '); 
@@ -29,8 +31,8 @@
 					}
 				}
 
-				if ( $this.data(arrayName) ) {  //get the 'data-*' attribute
-					eles = $this.data(arrayName);
+				if ( moreElements ) {  //get the 'data-*' attribute
+					eles = moreElements;
 					//add to elements array
 					eles = !$.isArray(eles) ? eles.split(' ') : eles;  //split space seperated values if needed
 					for ( i = 0; i < eles.length; i++ ) {
@@ -41,7 +43,7 @@
 				return elements;
 
 			} catch (e) {
-				alert(e.message);
+				console.log(e.message);
 			}
 		};
 
@@ -65,7 +67,7 @@
 				}
 				
 			} catch (e) {
-				alert(e.message);
+				console.log(e.message);
 			}
 		};
 
@@ -73,23 +75,25 @@
 		var submitRequest = function(event) {
 			
 			event.preventDefault();  //stop the default action
-			var config = {};  //config object
+			var config = {};
 
 			try {
 
-				switch ( $this.prop('tagName').toLowerCase() ) {  //default configs depend on element type
+				switch ( this.tagName.toLowerCase() ) {  //default configs depend on element type
 
 					case 'form':
-						config.action = $this.attr('action');
-						config.params = $this.serialize();
-						config.method = $this.attr('method') || 'post';
+						config.action = this.getAttribute('action');
+						config.params = $(this).serialize();
+						config.method = this.getAttribute('method') || 'post';
+						console.log(config.action);
 					break;
 
 					case 'a':
-						var uri = $this.attr('href').split('?');
+						var uri = this.href.split('?');
 						config.action = uri[0];
 						config.params = uri[1] || '';
 						config.method = 'get';
+						console.log(uri);
 					break;
 
 					default:
@@ -103,11 +107,11 @@
 				$.extend(config, settings);  //override config with settings
 
 				//prepare an array of element names to be updated on success or failure
-				config.successElements = setElements(config.successElements, 'successElements');  
-				config.failElements = setElements(config.failElements, 'failElements');
+				config.successElements = setElements(config.successElements, $(this).data('successElements'));  
+				config.failElements = setElements(config.failElements, $(this).data('failElements'));
 
 			} catch (e) {
-				alert(e.message);
+				console.log(e.message);
 			}
 
 			if ( !config.before || (config.before && config.before()) ) { 
@@ -157,7 +161,7 @@
 
 		}
 
-		this.bind(eventName, submitRequest);
+		this.live(eventName, submitRequest);
 
 		return this;  //make sure to maintain chainability!
 
