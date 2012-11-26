@@ -157,7 +157,7 @@
 
 		}
 
-		this.bind(eventName submitRequest);
+		this.bind(eventName, submitRequest);
 
 		return this;  //make sure to maintain chainability!
 
