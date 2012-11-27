@@ -7,8 +7,6 @@
 
 	//attach method to jQuery
 	$.fn.ajaxSubmitter = function(settings) {
-
-		$this = this;  //get a reference to the current object
 		
 		//function is used to create an array of update elements
 		var setElements = function(elements, moreElements) {
@@ -75,25 +73,24 @@
 		var submitRequest = function(event) {
 			
 			event.preventDefault();  //stop the default action
+			$this = event.target;
 			var config = {};
 
 			try {
 
-				switch ( this.tagName.toLowerCase() ) {  //default configs depend on element type
+				switch ( $this.tagName.toLowerCase() ) {  //default configs depend on element type
 
 					case 'form':
-						config.action = this.getAttribute('action');
-						config.params = $(this).serialize();
-						config.method = this.getAttribute('method') || 'post';
-						console.log(config.action);
+						config.action = $this.getAttribute('action');
+						config.params = $($this).serialize();
+						config.method = $this.getAttribute('method') || 'post';
 					break;
 
 					case 'a':
-						var uri = this.href.split('?');
+						var uri = $this.href.split('?');
 						config.action = uri[0];
 						config.params = uri[1] || '';
 						config.method = 'get';
-						console.log(uri);
 					break;
 
 					default:
@@ -107,8 +104,8 @@
 				$.extend(config, settings);  //override config with settings
 
 				//prepare an array of element names to be updated on success or failure
-				config.successElements = setElements(config.successElements, $(this).data('successElements'));  
-				config.failElements = setElements(config.failElements, $(this).data('failElements'));
+				config.successElements = setElements(config.successElements, $($this).data('successElements'));  
+				config.failElements = setElements(config.failElements, $($this).data('failElements'));
 
 			} catch (e) {
 				console.log(e.message);
@@ -148,20 +145,25 @@
 
 		if ( settings.eventName ) {
 			eventName = settings.eventName;
+			if ( this.length ) this.live(eventName, submitRequest);
 		} else {
+			
+			if ( this.length ) {
 
-			switch ( this.prop('tagName').toLowerCase() ) {  //event will depend on element type
-				case 'form':
-					eventName = 'submit';
-				break;
-				default:
-					eventName = 'click';
-				break;
+				switch ( this.prop('tagName').toLowerCase() ) {  //event will depend on element type
+					case 'form':
+						eventName = 'submit';
+					break;
+					default:
+						eventName = 'click';
+					break;
+				}
+
+				this.live(eventName, submitRequest);
+
 			}
 
 		}
-
-		this.live(eventName, submitRequest);
 
 		return this;  //make sure to maintain chainability!
 
