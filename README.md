@@ -18,8 +18,8 @@ Settings parameters allowed:
 * eventName (string, the event to trigger the request - default: for 'a' elements, 'click'; for 'form' elements, 'submit')
 
 You can also set the following data attributes in your HTML element:
-* data-successElements
-* data-failElements
+* data-success-elements
+* data-fail-elements
 
 These can be any valid CSS selectors separated by a space. This will allow you to attach the plugin to multiple
 elements while having the update elements be unique without having to write a separate line of JS for each.
